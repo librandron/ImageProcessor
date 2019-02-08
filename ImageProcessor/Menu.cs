@@ -21,9 +21,9 @@ namespace ImageProcessor
                     break;
 
                 case "2":
-
+                    NewDirectoryForPrint();
+                    Print();
                     break;
-
 
                 default:
                     Console.WriteLine("Wrong command");
