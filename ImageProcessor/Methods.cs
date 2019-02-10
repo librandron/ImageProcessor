@@ -43,6 +43,21 @@ namespace ImageProcessor
             }
         }
 
+        public void NewDirectoryForSort()
+        {
+            Console.WriteLine("Enter full working directory");
+            workingDirectory = Console.ReadLine();
+
+            DirectoryInfo dInformation = new DirectoryInfo(workingDirectory);
+            newDirectory = dInformation.Name + "_SortByYear";
+            if (dInformation.Exists)
+            {
+                newDirectory = dInformation.CreateSubdirectory(newDirectory).FullName;
+            }
+        }
+
+
+
         public void Rename() //rename by date
         {
             FileInfo[] images = GetImages();
@@ -66,8 +81,29 @@ namespace ImageProcessor
                 var property = GetProperty(imageInDir, TIMEOFCREATE);
                 var pr1 = property.TrimEnd('\0').Replace(':', '-');
                 Graphics drawing = Graphics.FromImage(imageInDir);
-                drawing.DrawString(pr1, new Font("Times New Roman", 20), new SolidBrush(Color.Black), 100, 100, new StringFormat());
+                drawing.DrawString(pr1, new Font("Times New Roman", 50), new SolidBrush(Color.Black), 3000, 100, new StringFormat());
                 imageInDir.Save($@"{newDirectory}\{pr1}{image.Extension}");
+            }
+        }
+
+        public void SortByYear() // sort by year
+        {
+            DirectoryInfo dInformation = new DirectoryInfo(newDirectory);
+            var images = GetImages();
+            //int date;
+
+            foreach (var image in images)
+            {
+                Image imageInDir = Image.FromFile(image.FullName);
+                var property = GetProperty(imageInDir, TIMEOFCREATE);
+                var pr1 = property.Remove(4); // get fro, our property first 4 symbols --> it is year.
+
+                if (dInformation.Exists)
+                {
+                    dInformation.CreateSubdirectory(pr1); // create subdirectory with name = year
+                }
+                imageInDir.Save($@"{newDirectory}\{pr1}\{image.Name}"); //save and automatically sort our images in folders .
+               
             }
         }
 
@@ -80,11 +116,12 @@ namespace ImageProcessor
         public string GetProperty(Image image, int prop) // get property and encoding it from metadate
         {
             var getValue = image.GetPropertyItem(prop).Value;
-            var encoding = new System.Text.ASCIIEncoding();
-            var encResult = encoding.GetString(getValue);
+            var encode = new System.Text.ASCIIEncoding();
+            var encResult = encode.GetString(getValue);
             return encResult;
           
         }
+
     }
 }
 

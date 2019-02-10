@@ -10,7 +10,7 @@ namespace ImageProcessor
     {
        public void drawMenu()
         {
-            Console.WriteLine("Choose what you want to do:\n Enter '1' and then press 'Enter' to rename photo by date \n Enter '2' and then press 'Enter' to draw date on image");
+            Console.WriteLine("Choose what you want to do:\n Enter '1' and then press 'Enter' to rename photo by date \n Enter '2' and then press 'Enter' to draw date on image \n Enter '3' and then press 'Enter' to sort images by year");
             var choose = Console.ReadLine();
 
             switch (choose)
@@ -24,7 +24,10 @@ namespace ImageProcessor
                     NewDirectoryForPrint();
                     Print();
                     break;
-
+                case "3":
+                    NewDirectoryForSort();
+                    SortByYear();
+                    break;
                 default:
                     Console.WriteLine("Wrong command");
                     break;
